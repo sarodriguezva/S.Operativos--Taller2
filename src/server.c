@@ -1,9 +1,17 @@
+//Servidor encargado de gestionar peticiones del cliente con el servicio de búsqueda en otro proceso.
+
 #include "../includes/defs.h"
 
 void loadData();
 void getValue(int *ptr, char *message, int min, int max);
 double search(int origen, int destino, int hora);
 void stop();
+
+
+/*
+Función que muestra interfaz al cliente.
+Pide una opción y gestionar las funciones de acuerdo a su elección.
+*/
 
 int showInterface(int *origen, int *destino, int *hora, double *tiempo_viaje){
     
@@ -43,7 +51,7 @@ int showInterface(int *origen, int *destino, int *hora, double *tiempo_viaje){
         printf("Origen: \t%d\n", *origen);
         printf("Destino: \t%d\n", *destino);
         printf("Hora: \t\t%d\n\n", *hora);
-        
+
         *tiempo_viaje = search(*origen, *destino, *hora);
 
         printf("Resultado de búsqueda. Tiempo medio de viaje: \t%.2f\n\n", *tiempo_viaje);
@@ -71,7 +79,9 @@ int showInterface(int *origen, int *destino, int *hora, double *tiempo_viaje){
 }
 
 
-
+/*
+Función que gestiona la entrada por teclado de un dato por parte del cliente.
+*/
 void getValue(int *var, char *message, int min, int max){
 
     printf("%s", message);
@@ -83,6 +93,14 @@ void getValue(int *var, char *message, int min, int max){
 
 }
 
+
+/*
+Función que envía los datos ingresados por el cliente
+al servicio (proceso) de búsqueda en tabla hash.
+
+Comunicación mediante tubería nombrada (FIFO).
+Espera a que el servicio regrese el valor requerido y lo retorna.
+*/
 double search(int origen, int destino, int hora){
 
     int fd, r;
@@ -119,6 +137,12 @@ double search(int origen, int destino, int hora){
     return value;
 }
 
+
+/*
+Función encargada de gestionar el cierre de cliente y servicio de búsqueda al tiempo.
+Para ello, envía valores de cerrado mediante una tubería nombrada (FIFO)
+al otro proceso.
+*/
 void stop(){
 
     int fd;
@@ -139,6 +163,11 @@ void stop(){
     close(fd);
 }
 
+
+/*
+Función principal.
+Crea las variables de interés y muestra la interfaz.
+*/
 int main(){
 
     int origen, destino, hora;

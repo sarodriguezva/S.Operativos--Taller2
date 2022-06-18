@@ -1,3 +1,5 @@
+//Servicio de búsqueda en el archivo "data.csv"
+
 #include "../includes/defs.h"
 
 void resetValues(int *origen, int *destino, int *hora);
@@ -6,13 +8,21 @@ double search(int origen, int destino, int hora);
 void sendData(int fd, double data);
 
 /*
-478,627,0,1145.57,523.7,1069.37,1.4
-477,637,0,1163.38,250.21,1138.78,1.23
-451,897,0,844.3,274.23,812.05,1.3
-951,151,12,865.02,371.3,789.38,1.55
-493,477,0,964.23,263.0,937.34,1.25
+Valores de búsqueda a probar.
+src-dst-hr-avg
+478, 627, 0, 1145.57
+477, 637, 0, 1163.38
+451, 897, 0, 844.3
+951, 151, 12, 865.02
+493, 477, 0, 964.23
 */
 
+
+/*
+Función principal.
+Crea la tubería nombrada (FIFO) de comunicación con el servidor.
+Deja el programa a la espera de los datos por el cliente.
+*/
 int main(){
 
     int fd;
@@ -44,7 +54,7 @@ int main(){
     while (1){
         getValues(fd, &origen, &destino, &hora);
 
-        //Verifica si el cliente presionó "Salir".
+        //Verifica si el cliente presionó "Salir" en la interfaz.
         if (origen == -2 && destino == -2 && hora == -2){
             break;
         }
@@ -53,12 +63,20 @@ int main(){
         sendData(fd, mean);
         resetValues(&origen, &destino, &hora);
     }
+
+    printf("Cerrando servicio de búsqueda...\n");
     
     close(fd);
     unlink(FIFO_FILE);
     return 0;
 }
 
+
+/*
+Función que se encarga de reiniciar los valores
+para poder capturar correctamente los datos que envíe el servidor.
+Solo para efectos de debugging.
+*/
 void resetValues(int *origen, int *destino, int *hora){
 
     printf("Reiniciando datos...\n");
@@ -67,6 +85,11 @@ void resetValues(int *origen, int *destino, int *hora){
     *hora = -1;
 }
 
+
+/*
+Función encargada de leer uno a uno los datos que envíe el servidor.
+Imprime los datos recibidos a modo de registro.
+*/
 void getValues(int fd, int *origen, int *destino, int *hora){
 
     int r;
@@ -102,6 +125,11 @@ void getValues(int fd, int *origen, int *destino, int *hora){
     printf("Hora: \t\t%d\n\n", *hora);
 }
 
+
+/*
+Función encargada de la búsqueda en el archivo "data.csv"
+de acuerdo a los valores recibidos por el servidor.
+*/
 double search(int origen, int destino, int hora){
     printf("Buscando valor...\n");
     int index;
@@ -129,6 +157,11 @@ double search(int origen, int destino, int hora){
 	return value;
 }
 
+
+/*
+Función encargada de enviar el valor encontrado al servidor
+mediante la tubería nombrada (FIFO).
+*/
 void sendData(int fd, double data){
 
     printf("Enviando valor...\n");

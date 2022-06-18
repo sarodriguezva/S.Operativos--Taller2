@@ -34,9 +34,12 @@ defs.o: $(INC_DIR)defs.c
 	gcc -Wall -c $(INC_DIR)defs.c
 
 
+#Mover los archivos *.o a la carpeta ./obj
 clean:
 	mv *o $(OBJ_DIR)
 
+
+#Eliminar los archivos *.o
 restart:
 	rm -f -r $(OBJ_DIR)*o
 

@@ -6,7 +6,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Sat Jun 18 15:03:09 2022
+# Make data base, printed on Sat Jun 18 16:51:56 2022
 
 # Variables
 
@@ -319,7 +319,8 @@ src/save.c:
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-06-18 15:01:26.833203575
+ 
+#  Last modified 2022-06-18 16:51:52.816760365
 #  File has been updated.
 #  Successfully updated.
 
@@ -386,14 +387,14 @@ restart:
 # ? := 
 # variable set hash-table stats:
 # Load=8/32=25%, Rehash=0, Collisions=1/12=8%
-#  recipe to execute (from 'Makefile', line 41):
+#  recipe to execute (from 'Makefile', line 44):
 	rm -f -r $(OBJ_DIR)*o
 
 run:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 44):
+#  recipe to execute (from 'Makefile', line 47):
 	chmod 777 bashScript.sh
 	./bashScript.sh
 
@@ -401,7 +402,7 @@ clean:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 38):
+#  recipe to execute (from 'Makefile', line 39):
 	mv *o $(OBJ_DIR)
 
 search: search.o defs.o
@@ -412,7 +413,6 @@ search: search.o defs.o
 	gcc -Wall -o $(BIN_DIR)search search.o defs.o
 
 search.o: src/search.c
- 
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -439,6 +439,6 @@ src/search.c:
 # strcache performance: lookups = 61 / hit rate = 47%
 # hash-table stats:
 # Load=32/8192=0%, Rehash=0, Collisions=1/61=2%
-# Finished Make data base on Sat Jun 18 15:03:09 2022
+# Finished Make data base on Sat Jun 18 16:51:56 2022
 
  

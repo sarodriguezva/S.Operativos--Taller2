@@ -1,5 +1,11 @@
+//Rutina de generación de archivo binario en disco duro para la búsqueda de registros.
+
 #include "../includes/defs.h"
 
+
+/*
+Función encargada de generar el hasheo ordenado de los datos en el archivo.
+*/
 void loadArray(double* result_list, viaje tmp){
 	char buffer[200];
     int h;
@@ -24,6 +30,11 @@ void loadArray(double* result_list, viaje tmp){
 	fclose(data);
 }
 
+
+/*
+Función encargada de escribir en el archivo binario
+cada valor promedio de viaje en el orden del hasheo.
+*/
 void loadBinFile(double* result_list){
 	FILE *bin = fopen(DATA_BIN, "w+b");
 	if (!bin){
@@ -41,6 +52,10 @@ void loadBinFile(double* result_list){
 }
 
 
+/*
+Función principal.
+Genera la tabla hash de valores promedio de viaje en un archivo binario.
+*/
 int main(){
     viaje tmp;
     double *result_list;
