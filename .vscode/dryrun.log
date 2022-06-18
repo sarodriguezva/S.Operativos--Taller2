@@ -1,6 +1,6 @@
 make --dry-run --keep-going --print-directory
 make: Entering directory '/home/sarodriguezva/Escritorio/Proyectos/S.Operativos--Taller2'
-rm -r ./obj/*o
+rm -f -r ./obj/*o
 gcc -Wall -c ./src/server.c
 gcc -Wall -c ./includes/defs.c
 gcc -Wall -o ./bin/server server.o defs.o
@@ -10,7 +10,6 @@ gcc -Wall -c ./src/search.c
 gcc -Wall -o ./bin/search search.o defs.o
 mv *o ./obj/
 chmod 777 bashScript.sh
-clear
 ./bashScript.sh
 make: Leaving directory '/home/sarodriguezva/Escritorio/Proyectos/S.Operativos--Taller2'
  

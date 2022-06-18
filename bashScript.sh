@@ -1,2 +1,5 @@
 cd bin
-./server
+./save
+echo "Archivo bin generado.\n"
+wait
+./search

@@ -38,9 +38,8 @@ clean:
 	mv *o $(OBJ_DIR)
 
 restart:
-	rm -r $(OBJ_DIR)*o
+	rm -f -r $(OBJ_DIR)*o
 
 run: 
 	chmod 777 bashScript.sh
-	clear
 	./bashScript.sh

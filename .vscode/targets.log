@@ -6,7 +6,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Sat Jun 18 13:00:01 2022
+# Make data base, printed on Sat Jun 18 15:03:09 2022
 
 # Variables
 
@@ -187,7 +187,7 @@ F_DIR = ./files/
 # environment
 GNOME_SHELL_SESSION_MODE = ubuntu
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-1f3404bf-542a-41ff-9e54-59ea49ac5722.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-17e7c977-ae97-496f-be87-7de105b9998a.sock
 # default
 MAKE_VERSION := 4.2.1
 # environment
@@ -279,7 +279,6 @@ VSCODE_PID = 4561
 
 # No implicit rules.
 
- 
 # Files
 
 save: save.o defs.o
@@ -320,7 +319,7 @@ src/save.c:
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-06-18 12:57:07.343095643
+#  Last modified 2022-06-18 15:01:26.833203575
 #  File has been updated.
 #  Successfully updated.
 
@@ -388,7 +387,7 @@ restart:
 # variable set hash-table stats:
 # Load=8/32=25%, Rehash=0, Collisions=1/12=8%
 #  recipe to execute (from 'Makefile', line 41):
-	rm -r $(OBJ_DIR)*o
+	rm -f -r $(OBJ_DIR)*o
 
 run:
 #  Implicit rule search has not been done.
@@ -396,7 +395,6 @@ run:
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 44):
 	chmod 777 bashScript.sh
-	clear
 	./bashScript.sh
 
 clean:
@@ -414,6 +412,7 @@ search: search.o defs.o
 	gcc -Wall -o $(BIN_DIR)search search.o defs.o
 
 search.o: src/search.c
+ 
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -440,6 +439,6 @@ src/search.c:
 # strcache performance: lookups = 61 / hit rate = 47%
 # hash-table stats:
 # Load=32/8192=0%, Rehash=0, Collisions=1/61=2%
-# Finished Make data base on Sat Jun 18 13:00:01 2022
+# Finished Make data base on Sat Jun 18 15:03:09 2022
 
  

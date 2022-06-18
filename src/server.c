@@ -39,6 +39,19 @@ int showInterface(int *origen, int *destino, int *hora, double *tiempo_viaje){
 
     case 4:
         *tiempo_viaje = search(*origen, *destino, *hora);
+        
+        printf("Datos recibidos: \n");
+        printf("Origen: \t%d\n", *origen);
+        printf("Destino: \t%d\n", *destino);
+        printf("Hora: \t\t%d\n\n", *hora);
+
+        printf("Resultado de búsqueda. Tiempo medio de viaje: \t%.2f\n\n", *tiempo_viaje);
+
+        printf("Presione una tecla para continuar...\n\n");
+        
+        char c;
+        scanf("%c", &c);
+
         showInterface(origen, destino, hora, tiempo_viaje);
         break;
 
@@ -79,11 +92,17 @@ double search(int origen, int destino, int hora){
         exit(-1);
     }
 
+    printf("Enviando datos...\n");
+
     write(fd, &origen, sizeof(int));
     write(fd, &destino, sizeof(int));
     write(fd, &hora, sizeof(int));
+    sleep(2);
+    
+    printf("Datos enviados con éxito!\n");
 
     while(1){
+        printf("Esperando respuesta...\n");
         r = read(fd, &value, sizeof(double));
 
         if (r == -1){
