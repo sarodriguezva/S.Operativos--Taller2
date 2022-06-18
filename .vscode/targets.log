@@ -1,6 +1,4 @@
 make all --print-data-base --no-builtin-variables --no-builtin-rules --question
-make: *** No rule to make target 'all'.  Stop.
-
 # GNU Make 4.2.1
 # Built for x86_64-pc-linux-gnu
 # Copyright (C) 1988-2016 Free Software Foundation, Inc.
@@ -8,7 +6,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Fri Jun 17 18:20:08 2022
+# Make data base, printed on Sat Jun 18 13:00:01 2022
 
 # Variables
 
@@ -51,7 +49,7 @@ SNAP_DATA = /var/snap/code/99
 # environment
 VSCODE_NLS_CONFIG = {"locale":"es-419","availableLanguages":{},"_languagePackSupport":true}
 # environment
-JOURNAL_STREAM = 8:51457
+JOURNAL_STREAM = 8:49625
 # environment
 XDG_CONFIG_DIRS = /etc/xdg/xdg-ubuntu:/etc/xdg
 # environment
@@ -66,6 +64,8 @@ MAKEFILE_LIST :=  Makefile
 GIO_LAUNCHED_DESKTOP_FILE = /var/lib/snapd/desktop/applications/code_code.desktop
 # environment
 USERNAME = sarodriguezva
+# makefile (from 'Makefile', line 4)
+OBJ_DIR = ./obj/
 # environment
 XDG_DATA_DIRS = /usr/share/ubuntu:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop
 # environment
@@ -75,7 +75,7 @@ VSCODE_VERBOSE_LOGGING = true
 # environment
 _ = /snap/code/99/usr/share/code/code
 # environment
-MANAGERPID = 1895
+MANAGERPID = 1886
 # environment
 LESSOPEN = | /usr/bin/lesspipe %s
 # environment
@@ -89,7 +89,7 @@ PATH = /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/
 # environment
 GPG_AGENT_INFO = /run/user/1000/gnupg/S.gpg-agent:0:1
 # environment
-SESSION_MANAGER = local/sarodriguezva-Aspire-A315-41G:@/tmp/.ICE-unix/2152,unix/sarodriguezva-Aspire-A315-41G:/tmp/.ICE-unix/2152
+SESSION_MANAGER = local/sarodriguezva-Aspire-A315-41G:@/tmp/.ICE-unix/2137,unix/sarodriguezva-Aspire-A315-41G:/tmp/.ICE-unix/2137
 # environment
 XDG_RUNTIME_DIR = /run/user/1000
 # environment
@@ -107,7 +107,7 @@ DISABLE_WAYLAND = 1
 # environment
 ELECTRON_RUN_AS_NODE = 1
 # environment
-INVOCATION_ID = 449dc24e543445f6859033e31f3251b1
+INVOCATION_ID = 5b564de9be5743169737c4d818cf8c37
 # environment
 GDK_PIXBUF_MODULEDIR = /snap/code/99/usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0/loaders
 # default
@@ -119,7 +119,7 @@ XDG_SESSION_DESKTOP = ubuntu
 # environment
 SSH_AUTH_SOCK = /run/user/1000/keyring/ssh
 # environment
-GIO_LAUNCHED_DESKTOP_FILE_PID = 4620
+GIO_LAUNCHED_DESKTOP_FILE_PID = 4510
 # automatic
 %F = $(notdir $%)
 # environment
@@ -133,9 +133,11 @@ PWD = /home/sarodriguezva/Escritorio/Proyectos/S.Operativos--Taller2
 # default
 .LOADED := 
 # environment
-SSH_AGENT_PID = 2076
+SSH_AGENT_PID = 2069
 # environment
 ORIGINAL_XDG_CURRENT_DESKTOP = ubuntu:GNOME
+# makefile (from 'Makefile', line 5)
+INC_DIR = ./includes/
 # environment
 GTK_MODULES = gail:atk-bridge
 # environment
@@ -180,10 +182,12 @@ QT_IM_MODULE = ibus
 SNAP_USER_DATA = /home/sarodriguezva/snap/code/99
 # environment
 SHLVL = 0
+# makefile (from 'Makefile', line 6)
+F_DIR = ./files/
 # environment
 GNOME_SHELL_SESSION_MODE = ubuntu
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-12db574c-7b33-4eea-a43c-9c54f38184a6.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-1f3404bf-542a-41ff-9e54-59ea49ac5722.sock
 # default
 MAKE_VERSION := 4.2.1
 # environment
@@ -191,8 +195,7 @@ USER = sarodriguezva
 # environment
 SNAP_REVISION = 99
 # makefile
-.DEFAULT_GOAL := 
- 
+.DEFAULT_GOAL := all
 # environment
 XDG_CURRENT_DESKTOP = Unity
 # automatic
@@ -227,10 +230,14 @@ QT_ACCESSIBILITY = 1
 MAKEFILES := 
 # environment
 SNAP_COOKIE = G8l6Ry7xMloIwUkHcnLFqcvJMHP2HvvmJf2s61M5lGul63deRInT
+# makefile (from 'Makefile', line 2)
+SRC_DIR = ./src/
 # automatic
 <F = $(notdir $<)
 # environment
 SNAP_NAME = code
+# makefile (from 'Makefile', line 3)
+BIN_DIR = ./bin/
 # environment
 LC_ALL = C
 # environment
@@ -254,9 +261,9 @@ GJS_DEBUG_OUTPUT = stderr
 # environment
 LANG = C
 # environment
-VSCODE_PID = 4674
+VSCODE_PID = 4561
 # variable set hash-table stats:
-# Load=121/1024=12%, Rehash=0, Collisions=18/145=12%
+# Load=126/1024=12%, Rehash=0, Collisions=19/159=12%
 
 # Pattern-specific Variable Values
 
@@ -264,29 +271,91 @@ VSCODE_PID = 4674
 
 # Directories
 
-# . (device 2055, inode 525058): 10 files, no impossibilities.
+# . (device 2055, inode 525058): 13 files, no impossibilities.
 
-# 10 files, no impossibilities in 1 directories.
+# 13 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
 # No implicit rules.
 
+ 
 # Files
 
-# Not a target:
-all:
+save: save.o defs.o
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 18):
+	gcc -Wall -o $(BIN_DIR)save save.o defs.o
+
+save.o: src/save.c
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 21):
+	gcc -Wall -c $(SRC_DIR)save.c
+
+all: restart server save search clean run
 #  Command line target.
 #  Implicit rule search has been done.
 #  File does not exist.
+#  File has been updated.
+#  Needs to be updated (-q is set).
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/4=0%
+
+# Not a target:
+src/save.c:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+.SUFFIXES:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
 #  File has not been updated.
 
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-06-16 22:10:52.820626202
+#  Last modified 2022-06-18 12:57:07.343095643
 #  File has been updated.
 #  Successfully updated.
+
+server.o: src/server.c
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 13):
+	gcc -Wall -c $(SRC_DIR)server.c
+
+server: server.o defs.o
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 10):
+	gcc -Wall -o $(BIN_DIR)server server.o defs.o
+
+defs.o: includes/defs.c
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 34):
+	gcc -Wall -c $(INC_DIR)defs.c
+
+# Not a target:
+src/server.c:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+includes/defs.c:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
 
 # Not a target:
 .DEFAULT:
@@ -294,21 +363,83 @@ Makefile:
 #  Modification time never checked.
 #  File has not been updated.
 
+restart:
+#  Implicit rule search has not been done.
+#  Implicit/static pattern stem: ''
+#  File does not exist.
+#  File has been updated.
+#  Needs to be updated (-q is set).
+# automatic
+# @ := restart
+# automatic
+# % := 
+# automatic
+# * := 
+# automatic
+# + := 
+# automatic
+# | := 
+# automatic
+# < := 
+# automatic
+# ^ := 
+# automatic
+# ? := 
+# variable set hash-table stats:
+# Load=8/32=25%, Rehash=0, Collisions=1/12=8%
+#  recipe to execute (from 'Makefile', line 41):
+	rm -r $(OBJ_DIR)*o
+
+run:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 44):
+	chmod 777 bashScript.sh
+	clear
+	./bashScript.sh
+
+clean:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 38):
+	mv *o $(OBJ_DIR)
+
+search: search.o defs.o
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 26):
+	gcc -Wall -o $(BIN_DIR)search search.o defs.o
+
+search.o: src/search.c
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 29):
+	gcc -Wall -c $(SRC_DIR)search.c
+
+# Not a target:
+src/search.c:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
 # files hash-table stats:
-# Load=4/1024=0%, Rehash=0, Collisions=0/14=0%
+# Load=18/1024=2%, Rehash=0, Collisions=0/56=0%
 # VPATH Search Paths
 
 # No 'vpath' search paths.
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 15 / storage = 125 B / avg = 8 B
-# current buf: size = 8162 B / used = 125 B / count = 15 / avg = 8 B
+# strcache buffers: 1 (0) / strings = 32 / storage = 266 B / avg = 8 B
+# current buf: size = 8162 B / used = 266 B / count = 32 / avg = 8 B
 
-# strcache performance: lookups = 19 / hit rate = 21%
+# strcache performance: lookups = 61 / hit rate = 47%
 # hash-table stats:
- 
-# Load=15/8192=0%, Rehash=0, Collisions=1/19=5%
-# Finished Make data base on Fri Jun 17 18:20:08 2022
+# Load=32/8192=0%, Rehash=0, Collisions=1/61=2%
+# Finished Make data base on Sat Jun 18 13:00:01 2022
 
  

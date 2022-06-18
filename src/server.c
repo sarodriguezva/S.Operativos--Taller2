@@ -1,7 +1,7 @@
 #include "../includes/defs.h"
 
 void loadData();
-void getValue(int *ptr, char *message[], int min, int max);
+void getValue(int *ptr, char *message, int min, int max);
 double search(int origen, int destino, int hora);
 
 int showInterface(int *origen, int *destino, int *hora, double *tiempo_viaje){
@@ -16,38 +16,39 @@ int showInterface(int *origen, int *destino, int *hora, double *tiempo_viaje){
     printf("5. Salir.\n\n");
     printf("Elige una opción: ");
 
+    fflush(stdin);
+
     scanf("%d", &option);
 
     system("clear");
-
     switch (option) {
     case 1:
         getValue(origen, "Ingrese ID del Origen: ", 1, 1160);
-        main();
+        showInterface(origen, destino, hora, tiempo_viaje);
         break;
 
     case 2:
         getValue(destino, "Ingrese ID del Destino: ", 1, 1160);
-        main();
+        showInterface(origen, destino, hora, tiempo_viaje);
         break;
 
     case 3:
         getValue(hora, "Ingrese Hora del Día: ", 0, 23);
-        main();
+        showInterface(origen, destino, hora, tiempo_viaje);
         break;
 
     case 4:
         *tiempo_viaje = search(*origen, *destino, *hora);
-        main();
+        showInterface(origen, destino, hora, tiempo_viaje);
         break;
 
     case 5:
-        printf("Adios!");
+        printf("Adios!\n");
         break;
 
     default:
         printf("\nError! ingrese un dato válido.\n");
-        main();
+        showInterface(origen, destino, hora, tiempo_viaje);
         break;
     }
 
@@ -56,13 +57,14 @@ int showInterface(int *origen, int *destino, int *hora, double *tiempo_viaje){
 
 
 
-void getValue(int *var, char *message[], int min, int max){
+void getValue(int *var, char *message, int min, int max){
 
     printf("%s", message);
 
     //Validar datos.
 
     scanf("%d", var);
+    system("clear");
 
 }
 

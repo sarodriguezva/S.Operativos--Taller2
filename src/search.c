@@ -13,8 +13,9 @@ int main(){
 
     resetValues(&origen, &destino, &hora);
 
-    if (mkfifo(FIFO_FILE, 0666) == -1){
+    if (mkfifoat(AT_FDCWD, FIFO_FILE, 0666) == -1){
         perror("Error al crear tubería nombrada en search.c");
+        unlink(FIFO_FILE);
         exit(-1);
     };
 
@@ -29,20 +30,21 @@ int main(){
     sendData(fd, mean);
 
     resetValues(&origen, &destino, &hora);
-
+    
+    unlink(FIFO_FILE);
     return 0;
 }
 
 void resetValues(int *origen, int *destino, int *hora){
     
-    origen = -1;
-    destino = -1;
-    hora = -1;
+    *origen = -1;
+    *destino = -1;
+    *hora = -1;
 }
 
 void getData(int fd, int *origen, int *destino, int *hora){
 
-    int *data;
+    int *data = NULL;
     int r;
 
     while(1){
@@ -52,9 +54,9 @@ void getData(int fd, int *origen, int *destino, int *hora){
             perror("Error al leer en server.c.");
             exit(-1);
         }else if (r > 0){
-            *origen = data;
-            *destino = data + 1;
-            *hora = data + 2;
+            origen = data;
+            destino = data + 1;
+            hora = data + 2;
             break;
         }
     }
