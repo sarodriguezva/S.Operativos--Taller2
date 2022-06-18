@@ -1,7 +1,7 @@
 #include "../includes/defs.h"
 
 void resetValues(int *origen, int *destino, int *hora);
-void getData(int fd, int *origen, int *destino, int *hora);
+void getValues(int fd, int *origen, int *destino, int *hora);
 double search(int origen, int destino, int hora);
 void sendData(int fd, double data);
 
@@ -41,11 +41,18 @@ int main(){
 
     printf("FIFO abierta exitosamente...\n");
 
-    getData(fd, &origen, &destino, &hora);
-    mean = search(origen, destino, hora);
-    sendData(fd, mean);
+    while (1){
+        getValues(fd, &origen, &destino, &hora);
 
-    resetValues(&origen, &destino, &hora);
+        //Verifica si el cliente presionó "Salir".
+        if (origen == -2 && destino == -2 && hora == -2){
+            break;
+        }
+
+        mean = search(origen, destino, hora);
+        sendData(fd, mean);
+        resetValues(&origen, &destino, &hora);
+    }
     
     close(fd);
     unlink(FIFO_FILE);
@@ -60,13 +67,11 @@ void resetValues(int *origen, int *destino, int *hora){
     *hora = -1;
 }
 
-void getData(int fd, int *origen, int *destino, int *hora){
-
-    printf("Obteniendo Data...\n");
+void getValues(int fd, int *origen, int *destino, int *hora){
 
     int r;
 
-    printf("reading...\n");
+    printf("Obteniendo Data...\n");
 
     r = read(fd, origen, sizeof(int));
     

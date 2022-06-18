@@ -3,6 +3,7 @@
 void loadData();
 void getValue(int *ptr, char *message, int min, int max);
 double search(int origen, int destino, int hora);
+void stop();
 
 int showInterface(int *origen, int *destino, int *hora, double *tiempo_viaje){
     
@@ -38,12 +39,12 @@ int showInterface(int *origen, int *destino, int *hora, double *tiempo_viaje){
         break;
 
     case 4:
-        *tiempo_viaje = search(*origen, *destino, *hora);
-        
         printf("Datos recibidos: \n");
         printf("Origen: \t%d\n", *origen);
         printf("Destino: \t%d\n", *destino);
         printf("Hora: \t\t%d\n\n", *hora);
+        
+        *tiempo_viaje = search(*origen, *destino, *hora);
 
         printf("Resultado de búsqueda. Tiempo medio de viaje: \t%.2f\n\n", *tiempo_viaje);
 
@@ -56,6 +57,7 @@ int showInterface(int *origen, int *destino, int *hora, double *tiempo_viaje){
         break;
 
     case 5:
+        stop();
         printf("Adios!\n");
         break;
 
@@ -88,7 +90,7 @@ double search(int origen, int destino, int hora){
 
     fd = open(FIFO_FILE, O_RDWR);
     if (!fd){
-        perror("Error al abrir tubería en search.c.");
+        perror("Error al abrir tubería en server.c.");
         exit(-1);
     }
 
@@ -97,8 +99,7 @@ double search(int origen, int destino, int hora){
     write(fd, &origen, sizeof(int));
     write(fd, &destino, sizeof(int));
     write(fd, &hora, sizeof(int));
-    sleep(2);
-    
+
     printf("Datos enviados con éxito!\n");
 
     while(1){
@@ -113,7 +114,29 @@ double search(int origen, int destino, int hora){
         }
     }
 
+    close(fd);
+
     return value;
+}
+
+void stop(){
+
+    int fd;
+    int closeflag = -2;
+
+    fd = open(FIFO_FILE, O_RDWR);
+    if (!fd){
+        perror("Error al abrir tubería en server.c.");
+        exit(-1);
+    }
+
+    printf("Cerrando sesión...\n");
+
+    write(fd, &closeflag, sizeof(int));
+    write(fd, &closeflag, sizeof(int));
+    write(fd, &closeflag, sizeof(int));
+
+    close(fd);
 }
 
 int main(){
