@@ -1,0 +1,6 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory '/home/sarodriguezva/Escritorio/Proyectos/S.Operativos--Taller2'
+make: Leaving directory '/home/sarodriguezva/Escritorio/Proyectos/S.Operativos--Taller2'
+ 
+make: *** No targets.  Stop.
+

@@ -5,6 +5,7 @@ void getValue(int *ptr, char *message[], int min, int max);
 double search(int origen, int destino, int hora);
 
 int showInterface(int *origen, int *destino, int *hora, double *tiempo_viaje){
+    
     int option;
 
     printf("Bienvenido\n");
@@ -53,9 +54,7 @@ int showInterface(int *origen, int *destino, int *hora, double *tiempo_viaje){
     return 0;
 }
 
-int hash(int origen, int destino, int hora){
-    return (origen-1)+1160*(destino-1)+1160*1160*(hora);
-}
+
 
 void getValue(int *var, char *message[], int min, int max){
 
@@ -68,11 +67,36 @@ void getValue(int *var, char *message[], int min, int max){
 }
 
 double search(int origen, int destino, int hora){
-    //Función de buscar.
-    return 0;
+
+    int fd, r;
+    double value;
+
+    fd = open(FIFO_FILE, O_RDWR);
+    if (!fd){
+        perror("Error al abrir tubería en search.c.");
+        exit(-1);
+    }
+
+    write(fd, &origen, sizeof(int));
+    write(fd, &destino, sizeof(int));
+    write(fd, &hora, sizeof(int));
+
+    while(1){
+        r = read(fd, &value, sizeof(double));
+
+        if (r == -1){
+            perror("Error al leer en server.c.");
+            exit(-1);
+        }else if (r > 0){
+            break;
+        }
+    }
+
+    return value;
 }
 
 int main(){
+
     int origen, destino, hora;
     double tiempo_viaje;
 
