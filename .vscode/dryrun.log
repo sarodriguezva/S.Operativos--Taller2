@@ -3,11 +3,14 @@ make: Entering directory '/home/sarodriguezva/Escritorio/Proyectos/S.Operativos-
 rm -f -r ./obj/*o
 gcc -Wall -c ./src/server.c
 gcc -Wall -c ./includes/defs.c
-gcc -Wall -o ./bin/server server.o defs.o
+gcc -Wall -c ./includes/socket_defs.c
+gcc -Wall -o ./bin/server server.o defs.o socket_defs.o
+gcc -Wall -c ./src/client.c
+gcc -Wall -o ./bin/client client.o defs.o socket_defs.o
 gcc -Wall -c ./src/save.c
-gcc -Wall -o ./bin/save save.o defs.o
+gcc -Wall -o ./bin/save save.o defs.o socket_defs.o
 gcc -Wall -c ./src/search.c
-gcc -Wall -o ./bin/search search.o defs.o
+gcc -Wall -o ./bin/search search.o defs.o socket_defs.o
 mv *o ./obj/
 chmod 777 bashScript.sh
 ./bashScript.sh

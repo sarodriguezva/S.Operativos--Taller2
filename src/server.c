@@ -10,27 +10,33 @@ void stop();
 
 int main(){
     int server_fd, client_fd;
-    int r;
-    struct sock_addr_in server, client;
-    socklen_t socklen;
+    struct sock_addr_in address;
+    int addrlen = sizeof(address);
+
+    printf("Inicializando servidor...\n");
 
     //Rutinas de inicialización de socket servidor.
-    createSocket(server_fd);
-    configureServerSocket(server_fd, server);
-    setSocketToListen(server_fd);
+    server_fd = createSocket(server_fd);
+    server_fd = configureServerSocket(server_fd, &address);
+    server_fd = setSocketToListen(server_fd);
 
+    printf("Servidor configurado con éxito!...\n");
+    printf("Esperando petición de cliente...\n");
 
     //Trae una conexión de la pila como socket.
-	client_fd = accept(server_fd, (struct sockaddr*)&client, &socklen);
+	client_fd = accept(server_fd, (struct sockaddr*)&address, (socklen_t*)&addrlen);
 	if (!client_fd){
 		perror("Error al aceptar conexión");
 		exit(-1);
 	}
 
+    printf("Conexión con cliente recibida!...\n");
+
 	processClient(client_fd);
 
+    printf("Cerrando servidor...\n");
 	//Cierra conexión.
-	close(server_fd);
+	shutdown(server_fd, SHUT_RDWR);
 
     return 0;
 }
@@ -58,8 +64,10 @@ void processClient(int client_fd){
 	}
 
 	//Cierra conexión
+    printf("Desconectando cliente...\n");
 	close(client_fd);
 	stop();
+    printf("Cliente desconectado!\n");
 }
 
 void receiveDataFromClient(int client_fd, int *origen, int *destino, int *hora){

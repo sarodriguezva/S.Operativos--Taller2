@@ -1,45 +1,54 @@
 #include "socket_defs.h"
 
-
-void createSocket(int fd){
+int createSocket(int fd){
     
     fd = socket(AF_INET, SOCK_STREAM, 0);
     if (!fd){
         perror("Error al crear socket");
         exit(-1);
     }
+	return fd;
 }
 
 
-void configureServerSocket(int fd, struct sock_addr_in stct){
+int configureServerSocket(int fd, struct sock_addr_in *addr){
     
     int r;
+	int option = 1;
+	
+	r = setsockopt(fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &option, sizeof(option));
+	if (r < 0){
+		perror("Error en setsockopt");
+		exit(-1);
+	}
 
     //Configuración de dirección del socket servidor.
-	stct.sin_family = AF_INET;
-	stct.sin_port = htons(PORT);
-	stct.sin_addr.s_addr = INADDR_ANY; //Cualquier dirección.
-	bzero(stct.sin_zero,8); //Llenar los ceros.
+	(*addr).sin_family = AF_INET;
+	(*addr).sin_port = htons(PORT);
+	(*addr).sin_addr.s_addr = INADDR_ANY; //Cualquier dirección.
+	bzero((*addr).sin_zero,8); //Llenar los ceros.
 
-    r = bind(fd, (struct sockaddr*) &stct, sizeof(struct sockaddr));
+    r = bind(fd, (struct sockaddr*) addr, sizeof(*addr));
 	if (r < 0){
 		perror("Error en bind");
 		exit(-1);
 	}
+
+	return fd;
 }
 
 
-void configureClientSocket(int fd, struct sock_addr_in stct, char *ip_addr){
+void configureClientSocket(struct sock_addr_in *addr, char *ip_addr){
 
-    stct.sin_family = AF_INET;
+    (*addr).sin_family = AF_INET;
 	//Conexión con el servidor.
-	stct.sin_port = htons(PORT);
-	inet_aton(ip_addr, &stct.sin_addr);
+	(*addr).sin_port = htons(PORT);
+	inet_pton(AF_INET, ip_addr, &(*addr).sin_addr);
 	//Convierte la dirección a binario y la asigna al atributo del struct.
 }
 
 
-void setSocketToListen(int fd){
+int setSocketToListen(int fd){
     
     int r;
 
@@ -49,16 +58,20 @@ void setSocketToListen(int fd){
 		perror("Error en listen");
 		exit(-1);
 	}
+
+	return fd;
 }
 
 
-void connectSocket(int fd, struct sock_addr_in stct){
+int connectSocket(int fd, struct sock_addr_in *addr){
     
     int r;
 
-    r = connect(fd, (struct sockaddr*)&stct, (socklen_t) sizeof(struct sockaddr));
+    r = connect(fd, (struct sockaddr*)addr, sizeof(*addr));
 	if (r < 0){
 		perror("Error en connect");
 		exit(-1);
 	}
+
+	return fd;
 }

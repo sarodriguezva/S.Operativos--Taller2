@@ -1,26 +1,29 @@
 #include "../includes/defs.h"
 #include "../includes/socket_defs.h"
 
-int showInterface(int fd, int *origen, int *destino, int *hora, double *tiempo_viaje);
+int showInterface(int *fd, int *origen, int *destino, int *hora, double *tiempo_viaje);
 void getValue(int *var, char *message, int min, int max);
 void sendDataToServer(int fd, int *origen, int *destino, int *hora);
 
 int main(){
     int client_fd;
-    int r;
     struct sock_addr_in server;
-    char buffer[200];
+
+    printf("Inicializando cliente...\n");
 
     //Rutinas de inicialización socket cliente.
-    createSocket(client_fd);
-    configureClientSocket(client_fd, server, "192.168.0.4");
-    connectSocket(client_fd, server);
+    client_fd = createSocket(client_fd);
+    configureClientSocket(&server, "127.0.0.1");
+    client_fd = connectSocket(client_fd, &server);
+
+    printf("Cliente configurado con éxito!...\n\n");
 
     int origen, destino, hora;
     double tiempo_viaje;
 
-    showInterface(client_fd, &origen, &destino, &hora, &tiempo_viaje);
+    showInterface(&client_fd, &origen, &destino, &hora, &tiempo_viaje);
 	
+    printf("Cerrando sesión...\n");
 	//Cierra conexión.
 	close(client_fd);
     return 0;
@@ -31,9 +34,10 @@ int main(){
 Función que muestra interfaz al cliente.
 Pide una opción y gestionar las funciones de acuerdo a su elección.
 */
-int showInterface(int fd, int *origen, int *destino, int *hora, double *tiempo_viaje){
+int showInterface(int *fd, int *origen, int *destino, int *hora, double *tiempo_viaje){
     
     int option;
+    int closeflag = -2;
 
     printf("Bienvenido\n");
     printf("1. Ingresar origen.\n");
@@ -67,9 +71,12 @@ int showInterface(int fd, int *origen, int *destino, int *hora, double *tiempo_v
     case 4:
         
         printf("Enviando datos al servidor...\n");
-        sendDataToServer(fd, origen, destino, hora);
+        sendDataToServer(*fd, origen, destino, hora);
 
-        recv(fd, tiempo_viaje, sizeof(double),0);
+        printf("Datos enviados exitosamente!\n");
+        printf("Esperando respuesta de servidor...\n");
+
+        recv(*fd, tiempo_viaje, sizeof(double),0);
 
         printf("Resultado de búsqueda. Tiempo medio de viaje: \t%.2f\n\n", *tiempo_viaje);
         printf("Presione una tecla para continuar...\n\n");
@@ -81,8 +88,7 @@ int showInterface(int fd, int *origen, int *destino, int *hora, double *tiempo_v
         break;
 
     case 5:
-        int closeflag = -2;
-        sendDataToServer(fd, &closeflag, &closeflag, &closeflag);
+        sendDataToServer(*fd, &closeflag, &closeflag, &closeflag);
         printf("Adios!\n");
         break;
 
@@ -111,7 +117,7 @@ void getValue(int *var, char *message, int min, int max){
 }
 
 void sendDataToServer(int fd, int *origen, int *destino, int *hora){
-    
+
     send(fd, origen, sizeof(int), 0);
     send(fd, destino, sizeof(int), 0);
     send(fd, hora, sizeof(int), 0);
