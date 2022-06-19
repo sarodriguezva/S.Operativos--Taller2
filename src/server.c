@@ -1,96 +1,72 @@
 //Servidor encargado de gestionar peticiones del cliente con el servicio de búsqueda en otro proceso.
 
 #include "../includes/defs.h"
+#include "../includes/socket_defs.h"
 
-void loadData();
-void getValue(int *ptr, char *message, int min, int max);
+void processClient(int client_fd);
+void receiveDataFromClient(int client_fd, int *origen, int *destino, int *hora);
 double search(int origen, int destino, int hora);
 void stop();
 
+int main(){
+    int server_fd, client_fd;
+    int r;
+    struct sock_addr_in server, client;
+    socklen_t socklen;
 
-/*
-Función que muestra interfaz al cliente.
-Pide una opción y gestionar las funciones de acuerdo a su elección.
-*/
+    //Rutinas de inicialización de socket servidor.
+    createSocket(server_fd);
+    configureServerSocket(server_fd, server);
+    setSocketToListen(server_fd);
 
-int showInterface(int *origen, int *destino, int *hora, double *tiempo_viaje){
-    
-    int option;
 
-    printf("Bienvenido\n");
-    printf("1. Ingresar origen.\n");
-    printf("2. Ingresar destino.\n");
-    printf("3. Ingresar hora.\n");
-    printf("4. Buscar tiempo de viaje medio.\n");
-    printf("5. Salir.\n\n");
-    printf("Elige una opción: ");
+    //Trae una conexión de la pila como socket.
+	client_fd = accept(server_fd, (struct sockaddr*)&client, &socklen);
+	if (!client_fd){
+		perror("Error al aceptar conexión");
+		exit(-1);
+	}
 
-    fflush(stdin);
+	processClient(client_fd);
 
-    scanf("%d", &option);
-
-    system("clear");
-    switch (option) {
-    case 1:
-        getValue(origen, "Ingrese ID del Origen: ", 1, 1160);
-        showInterface(origen, destino, hora, tiempo_viaje);
-        break;
-
-    case 2:
-        getValue(destino, "Ingrese ID del Destino: ", 1, 1160);
-        showInterface(origen, destino, hora, tiempo_viaje);
-        break;
-
-    case 3:
-        getValue(hora, "Ingrese Hora del Día: ", 0, 23);
-        showInterface(origen, destino, hora, tiempo_viaje);
-        break;
-
-    case 4:
-        printf("Datos recibidos: \n");
-        printf("Origen: \t%d\n", *origen);
-        printf("Destino: \t%d\n", *destino);
-        printf("Hora: \t\t%d\n\n", *hora);
-
-        *tiempo_viaje = search(*origen, *destino, *hora);
-
-        printf("Resultado de búsqueda. Tiempo medio de viaje: \t%.2f\n\n", *tiempo_viaje);
-
-        printf("Presione una tecla para continuar...\n\n");
-        
-        char c;
-        scanf("%c", &c);
-
-        showInterface(origen, destino, hora, tiempo_viaje);
-        break;
-
-    case 5:
-        stop();
-        printf("Adios!\n");
-        break;
-
-    default:
-        printf("\nError! ingrese un dato válido.\n");
-        showInterface(origen, destino, hora, tiempo_viaje);
-        break;
-    }
+	//Cierra conexión.
+	close(server_fd);
 
     return 0;
 }
 
+void processClient(int client_fd){
 
-/*
-Función que gestiona la entrada por teclado de un dato por parte del cliente.
-*/
-void getValue(int *var, char *message, int min, int max){
+	int origen, destino, hora;
+	double tiempo_viaje;
 
-    printf("%s", message);
+	while (1){
+		receiveDataFromClient(client_fd, &origen, &destino, &hora);
 
-    //Validar datos.
+		if (origen == -2 && destino == -2 && hora == -2){
+			break;
+		}
 
-    scanf("%d", var);
-    system("clear");
+		printf("Datos recibidos por teclado: \n");
+		printf("Origen: \t%d\n", origen);
+		printf("Destino: \t%d\n", destino);
+		printf("Hora: \t\t%d\n\n", hora);
 
+		tiempo_viaje = search(origen, destino, hora);
+
+		send(client_fd, &tiempo_viaje, sizeof(double), 0);
+	}
+
+	//Cierra conexión
+	close(client_fd);
+	stop();
+}
+
+void receiveDataFromClient(int client_fd, int *origen, int *destino, int *hora){
+
+	recv(client_fd, origen, sizeof(int), 0);
+	recv(client_fd, destino, sizeof(int), 0);
+	recv(client_fd, hora, sizeof(int), 0);
 }
 
 
@@ -161,19 +137,4 @@ void stop(){
     write(fd, &closeflag, sizeof(int));
 
     close(fd);
-}
-
-
-/*
-Función principal.
-Crea las variables de interés y muestra la interfaz.
-*/
-int main(){
-
-    int origen, destino, hora;
-    double tiempo_viaje;
-
-    showInterface(&origen, &destino, &hora, &tiempo_viaje);
-
-    return 0;
 }
