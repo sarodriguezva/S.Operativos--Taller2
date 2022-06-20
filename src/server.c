@@ -1,4 +1,7 @@
 //Servidor encargado de gestionar peticiones del cliente con el servicio de búsqueda en otro proceso.
+#include <sys/select.h>
+#include <sys/time.h>
+#include <unistd.h>
 
 #include "../includes/defs.h"
 #include "../includes/socket_defs.h"
@@ -21,18 +24,49 @@ int main(){
     server_fd = setSocketToListen(server_fd);
 
     printf("Servidor configurado con éxito!...\n");
-    printf("Esperando petición de cliente...\n");
 
-    //Trae una conexión de la pila como socket.
-	client_fd = accept(server_fd, (struct sockaddr*)&address, (socklen_t*)&addrlen);
-	if (!client_fd){
-		perror("Error al aceptar conexión");
-		exit(-1);
-	}
 
-    printf("Conexión con cliente recibida!...\n");
+    //Manejo de multiples sockets con select.
+    fd_set fds, readfds;
+    int fdmax, r;
 
-	processClient(client_fd);
+    FD_ZERO(&fds);
+    FD_SET(server_fd, &fds);
+    fdmax = server_fd;
+
+    while (1){
+        readfds = fds;
+
+        r = select(fdmax + 1, &readfds, NULL, NULL, NULL);
+        if (r < 0){
+            perror("Error en select");
+            exit(-1);
+        }
+
+        for (int fd = 0; fd < (fdmax + 1); fd++){
+            if (FD_ISSET(fd, &readfds)){
+                if (fd == server_fd){
+                    printf("Esperando petición de cliente...\n");
+
+                    //Trae una conexión de la pila como socket.
+                    client_fd = accept(server_fd, (struct sockaddr*)&address, (socklen_t*)&addrlen);
+                    if (!client_fd){
+                        perror("Error al aceptar conexión");
+                        exit(-1);
+                    }
+
+                    FD_SET(client_fd, &fds);
+                    if (client_fd > fdmax){
+                        fdmax = client_fd;
+                    }
+
+                    printf("Conexión con cliente recibida!...\n");
+
+                    processClient(client_fd);
+                }
+            }
+        }
+    }
 
     printf("Cerrando servidor...\n");
 	//Cierra conexión.
