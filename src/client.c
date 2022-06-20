@@ -6,7 +6,7 @@ void getValue(int *var, char *message, int min, int max);
 void sendDataToServer(int fd, int *origen, int *destino, int *hora);
 
 int main(){
-    int client_fd;
+    int client_fd = -1;
     struct sock_addr_in server;
 
     printf("Inicializando cliente...\n");

@@ -19,6 +19,7 @@ int configureServerSocket(int fd, struct sock_addr_in *addr){
 	r = setsockopt(fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &option, sizeof(option));
 	if (r < 0){
 		perror("Error en setsockopt");
+		close(fd);
 		exit(-1);
 	}
 
@@ -31,6 +32,7 @@ int configureServerSocket(int fd, struct sock_addr_in *addr){
     r = bind(fd, (struct sockaddr*) addr, sizeof(*addr));
 	if (r < 0){
 		perror("Error en bind");
+		close(fd);
 		exit(-1);
 	}
 
@@ -56,6 +58,7 @@ int setSocketToListen(int fd){
 	r = listen(fd, BACKLOG);
 	if (r < 0){
 		perror("Error en listen");
+		close(fd);
 		exit(-1);
 	}
 
@@ -70,6 +73,7 @@ int connectSocket(int fd, struct sock_addr_in *addr){
     r = connect(fd, (struct sockaddr*)addr, sizeof(*addr));
 	if (r < 0){
 		perror("Error en connect");
+		close(fd);
 		exit(-1);
 	}
 

@@ -1,18 +1,16 @@
 //Servidor encargado de gestionar peticiones del cliente con el servicio de búsqueda en otro proceso.
-#include <sys/select.h>
-#include <sys/time.h>
-#include <unistd.h>
+#include <pthread.h>
 
 #include "../includes/defs.h"
 #include "../includes/socket_defs.h"
 
-void processClient(int client_fd);
+void * processClient(void *pclient_fd);
 void receiveDataFromClient(int client_fd, int *origen, int *destino, int *hora);
 double search(int origen, int destino, int hora);
 void stop();
 
 int main(){
-    int server_fd, client_fd;
+    int server_fd = -1, client_fd = -1;
     struct sock_addr_in address;
     int addrlen = sizeof(address);
 
@@ -25,57 +23,39 @@ int main(){
 
     printf("Servidor configurado con éxito!...\n");
 
+    while(1){
+        printf("Esperando petición de cliente...\n");
 
-    //Manejo de multiples sockets con select.
-    fd_set fds, readfds;
-    int fdmax, r;
-
-    FD_ZERO(&fds);
-    FD_SET(server_fd, &fds);
-    fdmax = server_fd;
-
-    while (1){
-        readfds = fds;
-
-        r = select(fdmax + 1, &readfds, NULL, NULL, NULL);
-        if (r < 0){
-            perror("Error en select");
+        //Trae una conexión de la pila como socket.
+        client_fd = accept(server_fd, (struct sockaddr*)&address, (socklen_t*)&addrlen);
+        if (!client_fd){
+            perror("Error al aceptar conexión");
             exit(-1);
         }
 
-        for (int fd = 0; fd < (fdmax + 1); fd++){
-            if (FD_ISSET(fd, &readfds)){
-                if (fd == server_fd){
-                    printf("Esperando petición de cliente...\n");
+        printf("Conexión con cliente recibida!...\n");
 
-                    //Trae una conexión de la pila como socket.
-                    client_fd = accept(server_fd, (struct sockaddr*)&address, (socklen_t*)&addrlen);
-                    if (!client_fd){
-                        perror("Error al aceptar conexión");
-                        exit(-1);
-                    }
-
-                    FD_SET(client_fd, &fds);
-                    if (client_fd > fdmax){
-                        fdmax = client_fd;
-                    }
-
-                    printf("Conexión con cliente recibida!...\n");
-
-                    processClient(client_fd);
-                }
-            }
-        }
+        pthread_t tid;
+        int *pclient = malloc(sizeof(int));
+        *pclient = client_fd;
+        
+        pthread_create(&tid, NULL, processClient, pclient);
     }
 
     printf("Cerrando servidor...\n");
-	//Cierra conexión.
+	
+    //Cierra conexión.
 	shutdown(server_fd, SHUT_RDWR);
+    stop();
 
     return 0;
 }
 
-void processClient(int client_fd){
+
+void * processClient(void *pclient_fd){
+    //Inyección de argumento por el hilo.
+    int client_fd = *((int *)pclient_fd);
+    free(pclient_fd);
 
 	int origen, destino, hora;
 	double tiempo_viaje;
@@ -100,8 +80,9 @@ void processClient(int client_fd){
 	//Cierra conexión
     printf("Desconectando cliente...\n");
 	close(client_fd);
-	stop();
     printf("Cliente desconectado!\n");
+    pthread_exit(NULL);
+    return NULL;
 }
 
 void receiveDataFromClient(int client_fd, int *origen, int *destino, int *hora){

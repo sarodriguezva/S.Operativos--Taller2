@@ -7,7 +7,7 @@ F_DIR      = ./files/
 
 #Generar Server
 server: server.o defs.o socket_defs.o
-	gcc -Wall -o $(BIN_DIR)server server.o defs.o socket_defs.o
+	gcc -Wall -o $(BIN_DIR)server server.o defs.o socket_defs.o -lpthread
 
 server.o: $(SRC_DIR)server.c
 	gcc -Wall -c $(SRC_DIR)server.c
