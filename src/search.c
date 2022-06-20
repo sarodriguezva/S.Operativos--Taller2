@@ -101,21 +101,21 @@ void getValues(int fd, int *origen, int *destino, int *hora){
     if (r == -1){
         perror("Error al leer en server.c.");
         exit(-1);
-    }
+    }else if (r == EOF) return;
 
     r = read(fd, destino, sizeof(int));
     
     if (r == -1){
         perror("Error al leer en server.c.");
         exit(-1);
-    }
+    }else if (r == EOF) return;
 
     r = read(fd, hora, sizeof(int));
     
     if (r == -1){
         perror("Error al leer en server.c.");
         exit(-1);
-    }
+    }else if (r == EOF) return;
 
     printf("Data obtenida con éxito!\n");
 

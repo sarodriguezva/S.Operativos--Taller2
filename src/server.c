@@ -90,19 +90,21 @@ double search(int origen, int destino, int hora){
     int fd, r;
     double value;
 
+    printf("Abriendo comunicación con servicio...\n");
     fd = open(FIFO_FILE, O_RDWR);
     if (!fd){
         perror("Error al abrir tubería en server.c.");
         exit(-1);
     }
 
-    printf("Enviando datos...\n");
+    printf("Comunicación abierta!\n");
+    printf("Enviando datos al servicio...\n");
 
     write(fd, &origen, sizeof(int));
     write(fd, &destino, sizeof(int));
     write(fd, &hora, sizeof(int));
 
-    printf("Datos enviados con éxito!\n");
+    printf("Datos enviados al servicio con éxito!\n");
 
     while(1){
         printf("Esperando respuesta...\n");
@@ -111,13 +113,15 @@ double search(int origen, int destino, int hora){
         if (r == -1){
             perror("Error al leer en server.c.");
             exit(-1);
-        }else if (r > 0){
+        }else if (r > 0 || r == EOF){
             break;
         }
     }
+    printf("Valor recibido! \t%.2f\n", value);
 
+    printf("Cerrando comunicación con servicio...\n");
     close(fd);
-
+    printf("Comunicación cerrada.\n");
     return value;
 }
 
