@@ -4,9 +4,9 @@ Taller 2 de Sistemas Operativos.
 Autores:
 Santiago Rodríguez Vallejo - 1001066037 - sarodriguezva@unal.edu.co
 
-Cristhian David Mora Uribe - - cdmorau@unal.edu.co
+Cristhian David Mora Uribe - 1233494036 - cdmorau@unal.edu.co
 
-Javier Esteban Pacavita Galindo - - jpacavita@unal.edu.co
+Javier Esteban Pacavita Galindo - 1015478836 - jpacavita@unal.edu.co
 
 
 Manual de uso:

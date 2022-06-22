@@ -44,6 +44,8 @@ int main(){
     printf("FIFO creada exitosamente...\n");
 
     while (1){
+        printf("Obteniendo Data...\n");
+        
         fd = open(FIFO_FILE, O_RDONLY);
         if (!fd){
             perror("Error al abrir tubería en search.c.");
@@ -100,8 +102,6 @@ Imprime los datos recibidos a modo de registro.
 void getValues(int fd, int *origen, int *destino, int *hora){
 
     int r;
-
-    printf("Obteniendo Data...\n");
 
     r = read(fd, origen, sizeof(int));
     
