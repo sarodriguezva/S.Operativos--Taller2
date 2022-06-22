@@ -160,6 +160,9 @@ double search(int origen, int destino, int hora){
 }
 
 
+/*
+Función que imprime los detalles de una transacción de un cliente.
+*/
 void printLog(struct sock_addr_in address, int origen, int destino, int hora, double tiempo_viaje){
     getTimeStamp();
     printf("Cliente [%s] [%.2f - %d - %d]\n", 
