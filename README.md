@@ -3,8 +3,11 @@ Taller 2 de Sistemas Operativos.
 
 Autores:
 Santiago Rodríguez Vallejo - 1001066037 - sarodriguezva@unal.edu.co
+
 Cristhian David Mora Uribe - - cdmorau@unal.edu.co
+
 Javier Esteban Pacavita Galindo - - jpacavita@unal.edu.co
+
 
 Manual de uso:
 1) Crear una carpeta "files" y poner dentro el archivo de Uber con el nombre "data.csv".
@@ -39,7 +42,9 @@ Al seleccionar esta opción se imprimirá en pantalla el valor correspondiente a
 Al seleccionar la opción 5, se terminará la sesión en su cliente.
 
 Notas:
-    HASTA 32 CLIENTES PUEDEN CONECTARSE A LA VEZ EN EL SISTEMA.
-    El servidor imprimirá los registros de búsquedas hechos por cada cliente durante su tiempo de servicio.
+
+    * HASTA 32 CLIENTES PUEDEN CONECTARSE A LA VEZ EN EL SISTEMA.
+    
+    * El servidor imprimirá los registros de búsquedas hechos por cada cliente durante su tiempo de servicio.
 
 12) Una vez terminada la ejecución del proyecto, se recomienda terminar a mano los programas de los Terminales 1 y 2 para evitar el consumo de recursos en segundo plano.
