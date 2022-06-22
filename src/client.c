@@ -5,6 +5,12 @@ int showInterface(int *fd, int *origen, int *destino, int *hora, double *tiempo_
 void getValue(int *var, char *message, int min, int max);
 void sendDataToServer(int fd, int *origen, int *destino, int *hora);
 
+
+/*
+Función Principal.
+Crea y configura el socket de conexión del cliente con el servidor (local).
+Una vez logrado, muestra la interfaz al cliente.
+*/
 int main(){
     int client_fd = -1;
     struct sock_addr_in server;
@@ -81,6 +87,7 @@ int showInterface(int *fd, int *origen, int *destino, int *hora, double *tiempo_
         printf("Resultado de búsqueda. Tiempo medio de viaje: \t%.2f\n\n", *tiempo_viaje);
         printf("Presione una tecla para continuar...\n\n");
         
+        fflush(stdin);
         char c;
         scanf("%c", &c);
 
@@ -116,6 +123,11 @@ void getValue(int *var, char *message, int min, int max){
 
 }
 
+
+/*
+Función que envía los 3 datos cargados por el cliente al servidor,
+por medio del descriptor del socket de conexión.
+*/
 void sendDataToServer(int fd, int *origen, int *destino, int *hora){
 
     send(fd, origen, sizeof(int), 0);

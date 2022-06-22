@@ -4,11 +4,25 @@
 #include "../includes/defs.h"
 #include "../includes/socket_defs.h"
 
+struct thread_args{
+    int *fd;
+    struct sock_addr_in address;
+};
+
 void * processClient(void *pclient_fd);
 void receiveDataFromClient(int client_fd, int *origen, int *destino, int *hora);
 double search(int origen, int destino, int hora);
+void printLog(struct sock_addr_in address, int origen, int destino, int hora, double tiempo_viaje);
 void stop();
 
+
+/*
+Función Principal.
+Encargada de definir y configurar el socket de servidor.
+Queda a la espera de clientes entrantes a la red.
+Cuando llega un cliente, el sistema lo trata con un hilo nuevo,
+de forma que haya concurrencia de clientes.
+*/
 int main(){
     int server_fd = -1, client_fd = -1;
     struct sock_addr_in address;
@@ -35,11 +49,15 @@ int main(){
 
         printf("Conexión con cliente recibida!...\n");
 
+        //Creación de hilo para cliente individual.
         pthread_t tid;
-        int *pclient = malloc(sizeof(int));
-        *pclient = client_fd;
+
+        //Paso de argumentos para la función.
+        struct thread_args *args = malloc(sizeof(struct thread_args));
+        args->fd = &client_fd;
+        args->address = address;
         
-        pthread_create(&tid, NULL, processClient, pclient);
+        pthread_create(&tid, NULL, processClient, args);
     }
 
     printf("Cerrando servidor...\n");
@@ -52,39 +70,50 @@ int main(){
 }
 
 
-void * processClient(void *pclient_fd){
-    //Inyección de argumento por el hilo.
-    int client_fd = *((int *)pclient_fd);
-    free(pclient_fd);
-
+/*
+Función encargada de tratar a un solo cliente.
+Queda a la espera por los datos que envíe el cliente.
+Una vez recibidos, gestiona la búsqueda del valor correspondiente,
+al recibir dicho dato del servicio, lo devuelve por socket al cliente.
+Si el cliente decide salir, se maneja su desconexión.
+*/
+void * processClient(void *_args){
+    //Inyección de argumentos por el hilo.
+    struct thread_args *args = (struct thread_args *) _args;
+    int client_fd = *(args->fd);
+    struct sock_addr_in address = args->address;
+    free(args);
+    
 	int origen, destino, hora;
 	double tiempo_viaje;
 
 	while (1){
 		receiveDataFromClient(client_fd, &origen, &destino, &hora);
 
+        //Si el cliente decide salir, se reciben 3 flags con valor -2.
 		if (origen == -2 && destino == -2 && hora == -2){
 			break;
 		}
 
-		printf("Datos recibidos por teclado: \n");
-		printf("Origen: \t%d\n", origen);
-		printf("Destino: \t%d\n", destino);
-		printf("Hora: \t\t%d\n\n", hora);
-
+        //Comunicación con el servicio de búsqueda.
 		tiempo_viaje = search(origen, destino, hora);
 
 		send(client_fd, &tiempo_viaje, sizeof(double), 0);
+        printLog(address, origen, destino, hora, tiempo_viaje);
 	}
 
 	//Cierra conexión
-    printf("Desconectando cliente...\n");
 	close(client_fd);
     printf("Cliente desconectado!\n");
     pthread_exit(NULL);
     return NULL;
 }
 
+
+/*
+Función que recibe los datos del cliente por medio del descriptor de su socket de conexíón.
+Carga los 3 datos de interés uno a uno.s
+*/
 void receiveDataFromClient(int client_fd, int *origen, int *destino, int *hora){
 
 	recv(client_fd, origen, sizeof(int), 0);
@@ -105,24 +134,17 @@ double search(int origen, int destino, int hora){
     int fd, r;
     double value;
 
-    printf("Abriendo comunicación con servicio...\n");
     fd = open(FIFO_FILE, O_RDWR);
     if (!fd){
         perror("Error al abrir tubería en server.c.");
         exit(-1);
     }
 
-    printf("Comunicación abierta!\n");
-    printf("Enviando datos al servicio...\n");
-
     write(fd, &origen, sizeof(int));
     write(fd, &destino, sizeof(int));
     write(fd, &hora, sizeof(int));
 
-    printf("Datos enviados al servicio con éxito!\n");
-
     while(1){
-        printf("Esperando respuesta...\n");
         r = read(fd, &value, sizeof(double));
 
         if (r == -1){
@@ -132,12 +154,16 @@ double search(int origen, int destino, int hora){
             break;
         }
     }
-    printf("Valor recibido! \t%.2f\n", value);
 
-    printf("Cerrando comunicación con servicio...\n");
     close(fd);
-    printf("Comunicación cerrada.\n");
     return value;
+}
+
+
+void printLog(struct sock_addr_in address, int origen, int destino, int hora, double tiempo_viaje){
+    getTimeStamp();
+    printf("Cliente [%s] [%.2f - %d - %d]\n", 
+        inet_ntoa(address.sin_addr), tiempo_viaje, origen, destino);
 }
 
 

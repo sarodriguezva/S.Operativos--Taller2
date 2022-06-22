@@ -4,6 +4,7 @@
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <time.h>
 
 #define DATA_CSV    "../files/data.csv"
 #define DATA_BIN    "../bin/data.bin"
@@ -18,3 +19,4 @@ typedef struct viaje {
 } viaje;
 
 int hash(int origen, int destino, int hora);
+void getTimeStamp();

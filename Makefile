@@ -13,9 +13,10 @@ server.o: $(SRC_DIR)server.c
 	gcc -Wall -c $(SRC_DIR)server.c
 
 
-#Generar Client
+#Generar Client fuera de BIN_DIR.
+#Demostrar que funciona en un sitio distinto al server.
 client: client.o defs.o socket_defs.o
-	gcc -Wall -o $(BIN_DIR)client client.o defs.o socket_defs.o
+	gcc -Wall -o client client.o defs.o socket_defs.o
 
 client.o: $(SRC_DIR)client.c
 	gcc -Wall -c $(SRC_DIR)client.c
@@ -54,6 +55,7 @@ clean:
 #Eliminar los archivos *.o
 restart:
 	rm -f -r $(OBJ_DIR)*o
+	rm -f $(BIN_DIR)*
 
 run: 
 	chmod 777 bashScript.sh
