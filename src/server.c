@@ -11,7 +11,7 @@ struct thread_args{
 
 void * processClient(void *pclient_fd);
 void receiveDataFromClient(int client_fd, int *origen, int *destino, int *hora);
-double search(int origen, int destino, int hora);
+double search(int *origen, int *destino, int *hora);
 void printLog(struct sock_addr_in address, int origen, int destino, int hora, double tiempo_viaje);
 void stop();
 
@@ -96,7 +96,7 @@ void * processClient(void *_args){
 		}
 
         //Comunicación con el servicio de búsqueda.
-		tiempo_viaje = search(origen, destino, hora);
+		tiempo_viaje = search(&origen, &destino, &hora);
 
 		send(client_fd, &tiempo_viaje, sizeof(double), 0);
         printLog(address, origen, destino, hora, tiempo_viaje);
@@ -129,20 +129,41 @@ al servicio (proceso) de búsqueda en tabla hash.
 Comunicación mediante tubería nombrada (FIFO).
 Espera a que el servicio regrese el valor requerido y lo retorna.
 */
-double search(int origen, int destino, int hora){
+double search(int *origen, int *destino, int *hora){
 
     int fd, r;
     double value;
 
-    fd = open(FIFO_FILE, O_RDWR);
+    fd = open(FIFO_FILE, O_WRONLY);
     if (!fd){
         perror("Error al abrir tubería en server.c.");
         exit(-1);
     }
 
-    write(fd, &origen, sizeof(int));
-    write(fd, &destino, sizeof(int));
-    write(fd, &hora, sizeof(int));
+    r = write(fd, origen, sizeof(int));
+    if (r < 0){
+        perror("Error al escribir en server.c.");
+        exit(-1);
+    }
+
+    r = write(fd, destino, sizeof(int));
+    if (r < 0){
+        perror("Error al escribir en server.c.");
+        exit(-1);
+    }
+
+    r = write(fd, hora, sizeof(int));
+    if (r < 0){
+        perror("Error al escribir en server.c.");
+        exit(-1);
+    }
+    close(fd);
+
+    fd = open(FIFO_FILE, O_RDONLY);
+    if (!fd){
+        perror("Error al abrir tubería en server.c.");
+        exit(-1);
+    }
 
     while(1){
         r = read(fd, &value, sizeof(double));

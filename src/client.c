@@ -53,8 +53,6 @@ int showInterface(int *fd, int *origen, int *destino, int *hora, double *tiempo_
     printf("5. Salir.\n\n");
     printf("Elige una opción: ");
 
-    fflush(stdin);
-
     scanf("%d", &option);
 
     system("clear");
@@ -85,11 +83,6 @@ int showInterface(int *fd, int *origen, int *destino, int *hora, double *tiempo_
         recv(*fd, tiempo_viaje, sizeof(double),0);
 
         printf("Resultado de búsqueda. Tiempo medio de viaje: \t%.2f\n\n", *tiempo_viaje);
-        printf("Presione una tecla para continuar...\n\n");
-        
-        fflush(stdin);
-        char c;
-        scanf("%c", &c);
 
         showInterface(fd, origen, destino, hora, tiempo_viaje);
         break;

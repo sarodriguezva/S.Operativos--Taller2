@@ -1,12 +1,13 @@
-make --dry-run --keep-going --print-directory
+make --dry-run --always-make --keep-going --print-directory
 make: Entering directory '/home/sarodriguezva/Escritorio/Proyectos/S.Operativos--Taller2'
 rm -f -r ./obj/*o
+rm -f ./bin/*
 gcc -Wall -c ./src/server.c
 gcc -Wall -c ./includes/defs.c
 gcc -Wall -c ./includes/socket_defs.c
 gcc -Wall -o ./bin/server server.o defs.o socket_defs.o -lpthread
 gcc -Wall -c ./src/client.c
-gcc -Wall -o ./bin/client client.o defs.o socket_defs.o
+gcc -Wall -o client client.o defs.o socket_defs.o
 gcc -Wall -c ./src/save.c
 gcc -Wall -o ./bin/save save.o defs.o socket_defs.o
 gcc -Wall -c ./src/search.c

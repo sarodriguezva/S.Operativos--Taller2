@@ -43,15 +43,15 @@ int main(){
 
     printf("FIFO creada exitosamente...\n");
 
-    fd = open(FIFO_FILE, O_RDWR);
-    if (!fd){
-        perror("Error al abrir tubería en search.c.");
-        exit(-1);
-    }
-
-    printf("FIFO abierta exitosamente...\n");
-
     while (1){
+        fd = open(FIFO_FILE, O_RDONLY);
+        if (!fd){
+            perror("Error al abrir tubería en search.c.");
+            exit(-1);
+        }
+
+        printf("FIFO abierta exitosamente...\n");
+        
         getValues(fd, &origen, &destino, &hora);
 
         //Verifica si el cliente presionó "Salir" en la interfaz.
@@ -60,6 +60,13 @@ int main(){
         }
 
         mean = search(origen, destino, hora);
+
+        fd = open(FIFO_FILE, O_WRONLY);
+        if (!fd){
+            perror("Error al abrir tubería en search.c.");
+            exit(-1);
+        }
+
         sendData(fd, mean);
         resetValues(&origen, &destino, &hora);
     }
@@ -98,22 +105,22 @@ void getValues(int fd, int *origen, int *destino, int *hora){
 
     r = read(fd, origen, sizeof(int));
     
-    if (r == -1){
-        perror("Error al leer en server.c.");
+    if (r < 0){
+        perror("Error al leer en search.c.");
         exit(-1);
     }else if (r == EOF) return;
 
     r = read(fd, destino, sizeof(int));
     
-    if (r == -1){
-        perror("Error al leer en server.c.");
+    if (r < 0){
+        perror("Error al leer en search.c.");
         exit(-1);
     }else if (r == EOF) return;
 
     r = read(fd, hora, sizeof(int));
     
-    if (r == -1){
-        perror("Error al leer en server.c.");
+    if (r < 0){
+        perror("Error al leer en search.c.");
         exit(-1);
     }else if (r == EOF) return;
 
@@ -123,6 +130,7 @@ void getValues(int fd, int *origen, int *destino, int *hora){
     printf("Origen: \t%d\n", *origen);
     printf("Destino: \t%d\n", *destino);
     printf("Hora: \t\t%d\n\n", *hora);
+    close(fd);
 }
 
 
@@ -169,4 +177,5 @@ void sendData(int fd, double data){
     write(fd, &data, sizeof(double));
 
     printf("Valor enviado con éxito!\n");
+    close(fd);
 }
