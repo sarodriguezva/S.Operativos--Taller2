@@ -186,8 +186,15 @@ Función que imprime los detalles de una transacción de un cliente.
 */
 void printLog(struct sock_addr_in address, int origen, int destino, int hora, double tiempo_viaje){
     getTimeStamp();
-    printf("Cliente [%s] [%.2f - %d - %d]\n", 
+
+    FILE *data = fopen(LOG_FILE, "a");
+	if (!data){
+		perror("Error al abrir CSV.");
+	}
+  
+    fprintf(data,"Cliente [%s] [%.2f - %d - %d]\n", 
         inet_ntoa(address.sin_addr), tiempo_viaje, origen, destino);
+    fclose(data);
 }
 
 

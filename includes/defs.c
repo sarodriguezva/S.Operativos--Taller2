@@ -26,6 +26,12 @@ void getTimeStamp(){
     month = local->tm_mon + 1;
     year = local->tm_year + 1900;
 
-    printf("[Fecha %d-%02d-%02d T%02d:%02d:%02d] ",
+    FILE *data = fopen(LOG_FILE, "a");
+	if (!data){
+		perror("Error al abrir CSV.");
+	}
+    fprintf(data,"[Fecha %d-%02d-%02d T%02d:%02d:%02d] ",
     year, month, day, hours, minutes, seconds);
+    fclose(data);
+
 }
